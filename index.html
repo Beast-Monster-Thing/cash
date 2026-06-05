@@ -4,478 +4,472 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Drive Player</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Canela+Deck:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #0e0e0f;
-    --surface: #161618;
-    --surface2: #1e1e21;
-    --border: #2a2a2e;
-    --accent: #c8f060;
-    --accent-dim: rgba(200,240,96,0.12);
-    --text: #e8e8e4;
-    --muted: #6b6b72;
-    --muted2: #3a3a40;
+    --surface:                #f9f9f9;
+    --surface-lowest:         #ffffff;
+    --surface-low:            #f3f3f4;
+    --surface-container:      #eeeeee;
+    --surface-container-high: #e8e8e8;
+    --on-surface:             #1a1c1c;
+    --on-surface-variant:     #4c4546;
+    --outline:                #7e7576;
+    --outline-variant:        #cfc4c5;
+    --primary:                #000000;
+    --on-primary:             #ffffff;
+    --secondary:              #5e5e5e;
+    --error:                  #ba1a1a;
   }
 
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-weight: 300;
+    background: var(--surface);
+    color: var(--on-surface);
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 400;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px;
-  }
-
-  /* subtle grid texture */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: linear-gradient(var(--muted2) 1px, transparent 1px),
-                      linear-gradient(90deg, var(--muted2) 1px, transparent 1px);
-    background-size: 40px 40px;
-    opacity: 0.15;
-    pointer-events: none;
-    z-index: 0;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 64px 24px;
   }
 
   .app {
-    position: relative;
-    z-index: 1;
     width: 100%;
-    max-width: 640px;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 24px;
+    align-items: start;
   }
 
-  header {
-    margin-bottom: 40px;
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
+  /* ── Cards ─────────────────────────────────────────────────── */
+  .card {
+    background: var(--surface-lowest);
+    border: 1px solid var(--outline-variant);
+    border-radius: 0.125rem;
   }
 
-  header h1 {
-    font-family: 'DM Mono', monospace;
-    font-weight: 500;
-    font-size: 13px;
-    letter-spacing: 0.2em;
+  /* ── Config panel ───────────────────────────────────────────── */
+  .config-panel { padding: 36px 36px 40px; }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--on-surface-variant);
+    margin-bottom: 32px;
   }
 
-  header span {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-  }
-
-  /* Setup panel */
-  .setup-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 32px;
-    margin-bottom: 24px;
-  }
-
-  .setup-panel h2 {
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 24px;
-  }
-
-  .field {
-    margin-bottom: 16px;
-  }
+  .field { margin-bottom: 24px; }
 
   .field label {
     display: block;
-    font-size: 10px;
-    letter-spacing: 0.15em;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
+    color: var(--on-surface);
+    margin-bottom: 10px;
   }
 
   .field input {
     width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    padding: 10px 14px;
+    background: var(--surface-lowest);
+    border: 1px solid var(--outline-variant);
+    border-radius: 0.25rem;
+    color: var(--on-surface);
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 15px;
+    padding: 11px 14px;
     outline: none;
     transition: border-color 0.2s;
   }
 
-  .field input:focus {
-    border-color: var(--accent);
-  }
-
-  .field input::placeholder { color: var(--muted2); }
+  .field input:focus { border-color: var(--primary); }
+  .field input::placeholder { color: var(--outline); }
 
   .field-hint {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 6px;
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+
+  .field-hint strong {
+    color: var(--on-surface);
+    font-weight: 600;
+  }
+
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background: var(--primary);
+    color: var(--on-primary);
+    border: 1px solid var(--primary);
+    border-radius: 0.25rem;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 16px 24px;
+    cursor: pointer;
+    margin-top: 32px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--primary);
+  }
+
+  .status {
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    padding-top: 16px;
     line-height: 1.5;
   }
 
-  .field-hint a { color: var(--accent); text-decoration: none; }
+  .status.error { color: var(--error); }
+  .status.ok    { color: var(--secondary); }
 
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--accent);
-    color: #0e0e0f;
-    border: none;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 11px 20px;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-  }
-
-  .btn:hover { opacity: 0.85; }
-  .btn:active { transform: scale(0.98); }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-  }
-
-  .btn-ghost:hover { color: var(--text); border-color: var(--muted); opacity: 1; }
-
-  .btn-row {
+  /* ── Right column ───────────────────────────────────────────── */
+  .right-col {
     display: flex;
-    gap: 10px;
-    margin-top: 20px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 16px;
   }
 
-  /* Status bar */
-  .status {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    padding: 10px 0;
-    border-top: 1px solid var(--border);
-    margin-top: 16px;
-  }
-
-  .status.error { color: #ff6b6b; }
-  .status.ok { color: var(--accent); }
-
-  /* Now playing */
+  /* ── Now Playing ────────────────────────────────────────────── */
   .now-playing {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 28px 32px;
-    margin-bottom: 2px;
     display: none;
+    padding: 40px 48px 36px;
   }
 
-  .now-playing.visible { display: block; }
-
-  .track-info {
-    margin-bottom: 20px;
+  .now-playing.visible {
+    display: block;
+    animation: fadeIn 0.3s ease;
   }
 
-  .track-label {
-    font-size: 10px;
-    letter-spacing: 0.2em;
+  .np-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
+    color: var(--on-surface-variant);
+    text-align: center;
+    margin-bottom: 14px;
   }
 
   .track-name {
-    font-size: 18px;
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    color: var(--text);
-    white-space: nowrap;
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1.1;
+    height: 1.1em;
+    letter-spacing: -0.02em;
+    color: var(--on-surface);
+    text-align: center;
+    margin-bottom: 36px;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .track-index {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 4px;
+    white-space: nowrap;
   }
 
   /* Progress */
-  .progress-wrap {
-    margin-bottom: 16px;
-  }
+  .progress-wrap { margin-bottom: 32px; }
 
   .progress-bar {
     width: 100%;
-    height: 2px;
-    background: var(--muted2);
+    height: 3px;
+    background: var(--outline-variant);
     cursor: pointer;
     position: relative;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    border-radius: 9999px;
   }
 
   .progress-fill {
     height: 100%;
-    background: var(--accent);
+    background: var(--primary);
     width: 0%;
     transition: width 0.25s linear;
     pointer-events: none;
+    border-radius: 9999px;
   }
 
   .progress-times {
     display: flex;
     justify-content: space-between;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
+    font-size: 13px;
+    color: var(--on-surface-variant);
   }
 
   /* Controls */
   .controls {
     display: flex;
     align-items: center;
-    gap: 4px;
+    justify-content: center;
+    gap: 6px;
   }
 
   .ctrl-btn {
     background: none;
     border: none;
-    color: var(--muted);
+    color: var(--on-surface-variant);
     cursor: pointer;
-    padding: 8px;
-    font-size: 14px;
-    transition: color 0.15s;
+    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 1;
+    border-radius: 0.25rem;
+    transition: color 0.15s;
   }
 
-  .ctrl-btn:hover { color: var(--text); }
-  .ctrl-btn.active { color: var(--accent); }
+  .ctrl-btn:hover { color: var(--on-surface); }
+
+  .ctrl-btn.active { color: var(--on-surface); }
+
+  .ctrl-btn .material-symbols-outlined { font-size: 22px; }
 
   .ctrl-btn.play-pause {
-    background: var(--accent);
-    color: #0e0e0f;
-    padding: 10px 14px;
-    margin: 0 6px;
-    font-size: 16px;
+    background: var(--primary);
+    color: var(--on-primary);
+    padding: 16px 20px;
+    margin: 0 10px;
+    border-radius: 0.25rem;
   }
 
-  .ctrl-btn.play-pause:hover { opacity: 0.85; color: #0e0e0f; }
-
-  .spacer { flex: 1; }
-
-  /* Volume */
-  .volume-wrap {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  .ctrl-btn.play-pause:hover {
+    background: var(--primary);
+    color: var(--on-primary);
+    opacity: 0.8;
   }
 
-  .vol-icon { font-size: 12px; color: var(--muted); }
+  .ctrl-btn.play-pause .material-symbols-outlined { font-size: 26px; }
 
-  input[type=range] {
-    -webkit-appearance: none;
-    width: 80px;
-    height: 2px;
-    background: var(--muted2);
-    outline: none;
-    cursor: pointer;
-  }
-
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 10px;
-    height: 10px;
-    background: var(--accent);
-    border-radius: 50%;
-  }
-
-  /* Playlist */
-  .playlist-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
+  /* ── Queue panel ────────────────────────────────────────────── */
+  .queue-panel {
     display: none;
-    max-height: 360px;
-    overflow-y: auto;
+    overflow: hidden;
   }
 
-  .playlist-wrap.visible { display: block; }
-
-  .playlist-header {
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    background: var(--surface);
-    z-index: 2;
+  .queue-panel.visible {
+    display: block;
+    animation: fadeIn 0.3s ease;
   }
 
-  .playlist-header span {
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .playlist-item {
-    padding: 11px 20px;
-    border-bottom: 1px solid var(--border);
+  .queue-header {
     display: flex;
     align-items: center;
     gap: 14px;
+    padding: 22px 32px;
+    border-bottom: 1px solid var(--outline-variant);
+    position: sticky;
+    top: 0;
+    background: var(--surface-lowest);
+    z-index: 2;
+  }
+
+  .queue-title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--on-surface);
+  }
+
+  .queue-badge {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: var(--on-surface-variant);
+    background: var(--surface-container);
+    border: 1px solid var(--outline-variant);
+    border-radius: 9999px;
+    padding: 3px 10px;
+  }
+
+  .btn-text {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--on-surface-variant);
     cursor: pointer;
-    transition: background 0.12s;
-    font-size: 12px;
-    letter-spacing: 0.02em;
+    padding: 0;
+    transition: color 0.15s;
+  }
+
+  .btn-text:hover { color: var(--on-surface); }
+
+  /* Playlist items */
+  .playlist-items {
+    max-height: 440px;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .playlist-item {
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--outline-variant);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    cursor: pointer;
+    transition: background 0.1s, padding-left 0.15s;
   }
 
   .playlist-item:last-child { border-bottom: none; }
-  .playlist-item:hover { background: var(--surface2); }
 
-  .playlist-item.active {
-    background: var(--accent-dim);
-    color: var(--accent);
+  .playlist-item:hover {
+    background: var(--surface-low);
+    padding-left: 44px;
   }
 
+  .playlist-item.active { background: var(--surface-container-high); }
+
   .playlist-item .num {
-    font-size: 10px;
-    color: var(--muted);
-    width: 20px;
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    width: 22px;
     text-align: right;
     flex-shrink: 0;
   }
 
-  .playlist-item.active .num { color: var(--accent); }
+  .playlist-item .track-meta { flex: 1; overflow: hidden; }
 
   .playlist-item .name {
-    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--on-surface);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
+  .playlist-item.active .name { font-weight: 600; }
+
   .playlist-item .dur {
-    font-size: 10px;
-    color: var(--muted);
+    font-size: 13px;
+    color: var(--on-surface-variant);
     flex-shrink: 0;
   }
 
   /* Scrollbar */
   ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--surface); }
-  ::-webkit-scrollbar-thumb { background: var(--muted2); }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--outline-variant); }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  .now-playing.visible, .playlist-wrap.visible {
-    animation: fadeIn 0.25s ease;
+  /* Responsive */
+  @media (max-width: 800px) {
+    .app {
+      grid-template-columns: 1fr;
+    }
+
+    body { padding: 20px; }
+
+    .track-name { font-size: 32px; }
+    .now-playing { padding: 32px 28px; }
+    .queue-header { padding: 18px 24px; }
+    .playlist-item { padding: 14px 24px; }
+    .playlist-item:hover { padding-left: 36px; }
   }
 </style>
 </head>
 <body>
 <div class="app">
-  <header>
-    <h1>Drive Player</h1>
-    <span>// mp3 streaming from google drive</span>
-  </header>
 
-  <div class="setup-panel" id="setupPanel">
-    <h2>Configuration</h2>
+  <!-- ── Left: Configuration ───────────────────────────────── -->
+  <div class="card config-panel">
+    <div class="section-label">Configuration</div>
 
     <div class="field">
-      <label>Google API Key</label>
+      <label for="apiKey">Google API Key</label>
       <input type="password" id="apiKey" placeholder="AIza..." autocomplete="off">
       <div class="field-hint">
-        Create one at <a href="https://console.cloud.google.com/" target="_blank">console.cloud.google.com</a> →
-        APIs & Services → Credentials → API Key.<br>
-        Enable the <strong>Google Drive API</strong> for your project. Your folder must be <strong>publicly shared</strong> (Anyone with the link → Viewer).
+        Enable the <strong>Google Drive API</strong> in your cloud console.
       </div>
     </div>
 
     <div class="field">
-      <label>Drive Folder ID</label>
-      <input type="text" id="folderId" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms">
+      <label for="folderId">Folder ID</label>
+      <input type="text" id="folderId" placeholder="1BxiMVs...">
       <div class="field-hint">
-        From the folder URL: drive.google.com/drive/folders/<strong style="color:var(--text)">THIS_PART</strong>
+        Extract the alphanumeric ID from your shared Drive folder URL.
       </div>
     </div>
 
-    <div class="btn-row">
-      <button class="btn" onclick="loadFolder()">▶ Load Folder</button>
-      <button class="btn btn-ghost" onclick="togglePlaylist()">Queue</button>
-    </div>
+    <button type="button" class="btn-primary" onclick="loadFolder()">Load Folder</button>
 
-    <div class="status" id="status">— enter credentials above to begin —</div>
+    <div class="status" id="status">Enter credentials above to begin.</div>
   </div>
 
-  <!-- Now Playing -->
-  <div class="now-playing" id="nowPlaying">
-    <div class="track-info">
-      <div class="track-label">Now Playing</div>
+  <!-- ── Right: Player ─────────────────────────────────────── -->
+  <div class="right-col">
+
+    <!-- Now Playing -->
+    <div class="now-playing card" id="nowPlaying">
+      <div class="np-label">Now Playing</div>
       <div class="track-name" id="trackName">—</div>
-      <div class="track-index" id="trackIndex"></div>
+
+      <div class="progress-wrap">
+        <div class="progress-bar" id="progressBar" onclick="seekTo(event)">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-times">
+          <span id="timeCurrent">0:00</span>
+          <span id="timeDuration">0:00</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button type="button" class="ctrl-btn" id="shuffleBtn" onclick="toggleShuffle()" title="Shuffle">
+          <span class="material-symbols-outlined">shuffle</span>
+        </button>
+        <button type="button" class="ctrl-btn" onclick="prevTrack()" title="Previous">
+          <span class="material-symbols-outlined">skip_previous</span>
+        </button>
+        <button type="button" class="ctrl-btn play-pause" id="playPauseBtn" onclick="togglePlay()" title="Play" aria-label="Play">
+          <span class="material-symbols-outlined" id="playPauseIcon">play_arrow</span>
+        </button>
+        <button type="button" class="ctrl-btn" onclick="nextTrack()" title="Next">
+          <span class="material-symbols-outlined">skip_next</span>
+        </button>
+        <button type="button" class="ctrl-btn" id="repeatBtn" onclick="toggleRepeat()" title="Repeat: Off">
+          <span class="material-symbols-outlined" id="repeatIcon">repeat</span>
+        </button>
+      </div>
     </div>
 
-    <div class="progress-wrap">
-      <div class="progress-bar" id="progressBar" onclick="seekTo(event)">
-        <div class="progress-fill" id="progressFill"></div>
+    <!-- Queue -->
+    <div class="queue-panel card" id="playlistWrap">
+      <div class="queue-header">
+        <span class="queue-title">Up Next</span>
+        <span class="queue-badge" id="playlistCount">0 Tracks</span>
+        <button type="button" class="btn-text" onclick="clearQueue()">Clear Queue</button>
       </div>
-      <div class="progress-times">
-        <span id="timeCurrent">0:00</span>
-        <span id="timeDuration">0:00</span>
-      </div>
+      <div class="playlist-items" id="playlistItems"></div>
     </div>
 
-    <div class="controls">
-      <button class="ctrl-btn" id="shuffleBtn" onclick="toggleShuffle()" title="Shuffle">⇄</button>
-      <button class="ctrl-btn" onclick="prevTrack()" title="Previous">⏮</button>
-      <button class="ctrl-btn play-pause" id="playPauseBtn" onclick="togglePlay()">▶</button>
-      <button class="ctrl-btn" onclick="nextTrack()" title="Next">⏭</button>
-      <button class="ctrl-btn" id="repeatBtn" onclick="toggleRepeat()" title="Repeat">↺</button>
-      <div class="spacer"></div>
-      <div class="volume-wrap">
-        <span class="vol-icon">♪</span>
-        <input type="range" id="volSlider" min="0" max="1" step="0.02" value="1" oninput="setVolume(this.value)">
-      </div>
-    </div>
-  </div>
-
-  <!-- Playlist -->
-  <div class="playlist-wrap" id="playlistWrap">
-    <div class="playlist-header">
-      <span id="playlistCount">0 tracks</span>
-      <button class="btn btn-ghost" style="font-size:10px;padding:5px 10px;" onclick="shuffleAll()">Shuffle All</button>
-    </div>
-    <div id="playlistItems"></div>
   </div>
 </div>
 
-<audio id="audio"></audio>
+<audio id="audio" preload="none"></audio>
 
 <script>
 const audio = document.getElementById('audio');
@@ -497,10 +491,12 @@ async function loadFolder() {
   const folderId = document.getElementById('folderId').value.trim();
 
   if (!apiKey || !folderId) {
-    setStatus('⚠ Please enter both API key and folder ID.', 'error');
+    setStatus('Please enter both API key and folder ID.', 'error');
     return;
   }
 
+  // Stop any ongoing playback before loading a new folder
+  audio.pause();
   setStatus('Loading folder…');
 
   let allFiles = [];
@@ -509,7 +505,7 @@ async function loadFolder() {
   try {
     do {
       const url = new URL('https://www.googleapis.com/drive/v3/files');
-      url.searchParams.set('q', `'${folderId}' in parents and mimeType='audio/mpeg' and trashed=false`);
+      url.searchParams.set('q', `'${folderId}' in parents and mimeType='audio/mpeg' and trashed=false`); // intentionally MP3-only; other formats use different MIME types
       url.searchParams.set('fields', 'nextPageToken,files(id,name,size)');
       url.searchParams.set('orderBy', 'name');
       url.searchParams.set('pageSize', '1000');
@@ -520,7 +516,7 @@ async function loadFolder() {
       const data = await res.json();
 
       if (data.error) {
-        setStatus(`⚠ API error: ${data.error.message}`, 'error');
+        setStatus(`API error: ${data.error.message}`, 'error');
         return;
       }
 
@@ -541,26 +537,25 @@ async function loadFolder() {
 
     isLoaded = true;
     buildPlaylist();
-    setStatus(`✓ ${tracks.length} track${tracks.length !== 1 ? 's' : ''} loaded`, 'ok');
+    setStatus(`${tracks.length} track${tracks.length !== 1 ? 's' : ''} loaded.`, 'ok');
 
-    // Show player UI
     document.getElementById('nowPlaying').classList.add('visible');
     document.getElementById('playlistWrap').classList.add('visible');
 
-    // Start with first track (or shuffle)
     shuffledOrder = [...Array(tracks.length).keys()];
     if (isShuffled) shuffleArray(shuffledOrder);
     loadTrack(0, false);
 
   } catch (e) {
-    setStatus(`⚠ Failed to load: ${e.message}`, 'error');
+    setStatus(`Failed to load: ${e.message}`, 'error');
   }
 }
 
 function buildPlaylist() {
   const container = document.getElementById('playlistItems');
   container.innerHTML = '';
-  document.getElementById('playlistCount').textContent = `${tracks.length} track${tracks.length !== 1 ? 's' : ''}`;
+  document.getElementById('playlistCount').textContent =
+    `${tracks.length} Track${tracks.length !== 1 ? 's' : ''}`;
 
   tracks.forEach((t, i) => {
     const div = document.createElement('div');
@@ -568,7 +563,9 @@ function buildPlaylist() {
     div.dataset.index = i;
     div.innerHTML = `
       <span class="num">${String(i + 1).padStart(2, '0')}</span>
-      <span class="name">${escHtml(t.name)}</span>
+      <div class="track-meta">
+        <div class="name">${escHtml(t.name)}</div>
+      </div>
       <span class="dur" id="dur-${i}">—</span>
     `;
     div.addEventListener('click', () => {
@@ -586,13 +583,16 @@ function loadTrack(pos, autoplay = true) {
   const track = tracks[realIndex];
 
   document.getElementById('trackName').textContent = track.name;
-  document.getElementById('trackIndex').textContent =
-    `${pos + 1} / ${tracks.length}${isShuffled ? ' (shuffled)' : ''}`;
-
   audio.src = track.url;
   audio.load();
 
-  if (autoplay) audio.play().then(updatePlayBtn).catch(e => setStatus(`⚠ Playback error: ${e.message}`, 'error'));
+  if (autoplay) {
+    audio.play().then(updatePlayBtn).catch(e => {
+      if (e.name !== 'AbortError') setStatus(`Playback error: ${e.message}`, 'error');
+    });
+  } else {
+    updatePlayBtn();
+  }
 
   updatePlaylistHighlight(realIndex);
 }
@@ -601,19 +601,29 @@ function updatePlaylistHighlight(realIndex) {
   document.querySelectorAll('.playlist-item').forEach(el => {
     el.classList.toggle('active', parseInt(el.dataset.index) === realIndex);
   });
-  // Scroll into view
   const active = document.querySelector('.playlist-item.active');
   if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
 function updatePlayBtn() {
-  document.getElementById('playPauseBtn').textContent = audio.paused ? '▶' : '⏸';
+  const isPaused = audio.paused;
+  document.getElementById('playPauseIcon').textContent = isPaused ? 'play_arrow' : 'pause';
+  const btn = document.getElementById('playPauseBtn');
+  const label = isPaused ? 'Play' : 'Pause';
+  btn.title = label;
+  btn.setAttribute('aria-label', label);
 }
 
 function togglePlay() {
   if (!isLoaded) return;
-  if (audio.paused) audio.play().then(updatePlayBtn);
-  else { audio.pause(); updatePlayBtn(); }
+  if (audio.paused) {
+    audio.play().then(updatePlayBtn).catch(e => {
+      if (e.name !== 'AbortError') setStatus(`Playback error: ${e.message}`, 'error');
+    });
+  } else {
+    audio.pause();
+    updatePlayBtn();
+  }
 }
 
 function nextTrack() {
@@ -635,7 +645,6 @@ function toggleShuffle() {
   if (isShuffled) {
     const realCurrent = shuffledOrder[currentIndex] ?? currentIndex;
     shuffleArray(shuffledOrder);
-    // Keep current track first in shuffled order
     const ci = shuffledOrder.indexOf(realCurrent);
     [shuffledOrder[0], shuffledOrder[ci]] = [shuffledOrder[ci], shuffledOrder[0]];
     currentIndex = 0;
@@ -646,26 +655,91 @@ function toggleShuffle() {
   }
 
   const realIndex = isShuffled ? shuffledOrder[currentIndex] : currentIndex;
-  document.getElementById('trackIndex').textContent =
-    `${currentIndex + 1} / ${tracks.length}${isShuffled ? ' (shuffled)' : ''}`;
-  updatePlaylistHighlight(realIndex);
+
+  // Apply active class before animating so the highlight travels with its item
+  document.querySelectorAll('.playlist-item').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.index) === realIndex);
+  });
+
+  // Visually reorder the list, then scroll to the active item once settled
+  rebuildPlaylistOrder(() => {
+    const active = document.querySelector('.playlist-item.active');
+    if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  });
 }
 
-function shuffleAll() {
+// Reorders the playlist DOM to match the current play order and animates items
+// into their new positions using a FLIP technique. Calls onComplete when done.
+function rebuildPlaylistOrder(onComplete) {
+  const container = document.getElementById('playlistItems');
+  const items = [...container.querySelectorAll('.playlist-item')];
+  if (items.length === 0) { if (onComplete) onComplete(); return; }
+
+  // Snapshot where every item currently sits on screen
+  const oldTops = new Map(items.map(el => [el, el.getBoundingClientRect().top]));
+
+  // Reorder DOM nodes to match the new play sequence
+  const order = isShuffled ? shuffledOrder : [...Array(tracks.length).keys()];
+  order.forEach(realIdx => {
+    const item = items.find(el => parseInt(el.dataset.index) === realIdx);
+    if (item) container.appendChild(item);
+  });
+
+  // FLIP: push each item back to its old visual position, then animate to zero
+  let pending = 0;
+  items.forEach(el => {
+    const dy = oldTops.get(el) - el.getBoundingClientRect().top;
+    if (dy === 0) return;
+    pending++;
+    el.style.transition = 'none';
+    el.style.transform = `translateY(${dy}px)`;
+    void el.offsetHeight; // force reflow so the browser registers the start state
+    el.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    el.style.transform = '';
+    el.addEventListener('transitionend', () => {
+      el.style.transition = '';
+      el.style.transform = '';
+      if (--pending === 0 && onComplete) onComplete();
+    }, { once: true });
+  });
+
+  if (pending === 0 && onComplete) onComplete();
+}
+
+function clearQueue() {
   if (!isLoaded) return;
-  isShuffled = true;
-  document.getElementById('shuffleBtn').classList.add('active');
-  shuffledOrder = [...Array(tracks.length).keys()];
-  shuffleArray(shuffledOrder);
+  audio.pause();
+  audio.removeAttribute('src');
+  audio.load();
+  tracks = [];
+  shuffledOrder = [];
   currentIndex = 0;
-  loadTrack(0, true);
+  isLoaded = false;
+  isShuffled = false;
+  repeatMode = 0;
+  document.getElementById('playlistItems').innerHTML = '';
+  document.getElementById('playlistCount').textContent = '0 Tracks';
+  document.getElementById('nowPlaying').classList.remove('visible');
+  document.getElementById('playlistWrap').classList.remove('visible');
+  document.getElementById('trackName').textContent = '—';
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('timeCurrent').textContent = '0:00';
+  document.getElementById('timeDuration').textContent = '0:00';
+  document.getElementById('shuffleBtn').classList.remove('active');
+  const repeatBtn = document.getElementById('repeatBtn');
+  repeatBtn.classList.remove('active');
+  repeatBtn.title = 'Repeat: Off';
+  document.getElementById('repeatIcon').textContent = 'repeat';
+  updatePlayBtn();
+  setStatus('Queue cleared.');
 }
 
 function toggleRepeat() {
   repeatMode = (repeatMode + 1) % 3;
   const btn = document.getElementById('repeatBtn');
+  const icon = document.getElementById('repeatIcon');
   btn.classList.toggle('active', repeatMode > 0);
-  btn.textContent = repeatMode === 2 ? '↺¹' : '↺';
+  icon.textContent = repeatMode === 2 ? 'repeat_one' : 'repeat';
   btn.title = ['Repeat: Off', 'Repeat: All', 'Repeat: One'][repeatMode];
 }
 
@@ -673,13 +747,12 @@ function seekTo(e) {
   if (!audio.duration) return;
   const rect = e.currentTarget.getBoundingClientRect();
   const pct = (e.clientX - rect.left) / rect.width;
+  const fill = document.getElementById('progressFill');
+  // Disable transition so the bar jumps instantly (avoids animating backward on rewind)
+  fill.style.transition = 'none';
+  fill.style.width = (pct * 100) + '%';
   audio.currentTime = pct * audio.duration;
-}
-
-function setVolume(v) { audio.volume = v; }
-
-function togglePlaylist() {
-  document.getElementById('playlistWrap').classList.toggle('visible');
+  requestAnimationFrame(() => { fill.style.transition = ''; });
 }
 
 function shuffleArray(arr) {
@@ -696,11 +769,11 @@ function formatTime(s) {
   return `${m}:${sec.toString().padStart(2, '0')}`;
 }
 
+// Escapes &, <, > — sufficient here since names are injected as text content, never in attributes
 function escHtml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-// Audio events
 audio.addEventListener('play', updatePlayBtn);
 audio.addEventListener('pause', updatePlayBtn);
 
@@ -713,29 +786,27 @@ audio.addEventListener('timeupdate', () => {
 
 audio.addEventListener('loadedmetadata', () => {
   document.getElementById('timeDuration').textContent = formatTime(audio.duration);
-  // Cache duration in playlist
   const realIndex = isShuffled ? shuffledOrder[currentIndex] : currentIndex;
   const durEl = document.getElementById(`dur-${realIndex}`);
   if (durEl) durEl.textContent = formatTime(audio.duration);
 });
 
 audio.addEventListener('ended', () => {
-  if (repeatMode === 2) { audio.play(); return; }
+  if (repeatMode === 2) { audio.play().catch(() => {}); return; }
   if (currentIndex < tracks.length - 1) loadTrack(currentIndex + 1, true);
   else if (repeatMode === 1) loadTrack(0, true);
   else updatePlayBtn();
 });
 
 audio.addEventListener('error', () => {
-  setStatus('⚠ Could not stream this file. Ensure the folder is publicly shared.', 'error');
+  setStatus('Could not stream this file. Ensure the folder is publicly shared.', 'error');
 });
 
-// Keyboard shortcuts
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT') return;
   if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
-  if (e.code === 'ArrowRight') nextTrack();
-  if (e.code === 'ArrowLeft') prevTrack();
+  if (e.code === 'ArrowRight' && isLoaded) { e.preventDefault(); nextTrack(); }
+  if (e.code === 'ArrowLeft'  && isLoaded) { e.preventDefault(); prevTrack(); }
 });
 </script>
 </body>
