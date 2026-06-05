@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Run HTML</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#111;color:#eee;font:14px monospace;display:flex;flex-direction:column;height:100vh}
+#bar{display:flex;gap:8px;padding:8px;background:#1a1a1a;border-bottom:1px solid #333}
+textarea{flex:1;background:#0d0d0d;color:#eee;border:1px solid #333;padding:6px;resize:none;font:13px monospace;border-radius:3px}
+button{background:#2a2a2a;color:#eee;border:1px solid #444;padding:6px 14px;cursor:pointer;border-radius:3px;white-space:nowrap}
+button:hover{background:#3a3a3a}
+iframe{flex:1;border:none;display:none;background:#fff}
+#hint{flex:1;display:flex;align-items:center;justify-content:center;color:#555;font-size:13px}
+</style>
+</head>
+<body>
+<div id="bar">
+  <textarea id="src" placeholder="Paste HTML here…" rows="1"></textarea>
+  <button onclick="run()">▶ Run</button>
+  <button onclick="fs()">⛶ Fullscreen</button>
+  <button onclick="clear_()">✕</button>
+</div>
+<div id="hint">Paste HTML above and click Run</div>
+<iframe id="f" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-top-navigation-by-user-activation"></iframe>
+<script>
+var f=document.getElementById('f'),hint=document.getElementById('hint'),blob=null;
+function run(){
+  var s=document.getElementById('src').value.trim();
+  if(!s)return;
+  if(blob)URL.revokeObjectURL(blob);
+  blob=URL.createObjectURL(new Blob([s],{type:'text/html'}));
+  f.src=blob;
+  f.style.display='block';hint.style.display='none';
+}
+function fs(){
+  if(f.style.display==='none')run();
+  (f.requestFullscreen||f.webkitRequestFullscreen).call(f);
+}
+function clear_(){
+  document.getElementById('src').value='';
+  if(blob){URL.revokeObjectURL(blob);blob=null;}
+  f.src='about:blank';
+  f.style.display='none';hint.style.display='flex';
+}
+</script>
+</body>
+</html>
